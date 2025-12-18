@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "mobile-app",
-    "slug": "mobile-app",
+    "name": "Wallet-app",
+    "slug": "Wallet-app",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
-    "scheme": "mobileapp",
+    "icon": "./assets/images/logo.png",
+    "scheme": "walletapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
