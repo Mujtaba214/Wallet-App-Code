@@ -6,7 +6,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { styles } from "../../assets/styles/auth.styles";
 import { Ionicons } from "@expo/vector-icons";
 import { useState } from "react";
-import colors from "../../constants/color";
+import { colors } from "../../constants/color";
 
 export default function Page() {
   const { signIn, setActive, isLoaded } = useSignIn();

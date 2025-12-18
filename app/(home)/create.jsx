@@ -13,6 +13,7 @@ import { useState } from "react";
 import { styles } from "../../assets/styles/create.styles.js";
 import { colors } from "../../constants/color.js";
 import { Ionicons } from "@expo/vector-icons";
+import { API_URL } from "../../lib/api.js";
 
 const CATEGORIES = [
   { id: "food", name: "Food & Drinks", icon: "fast-food" },
@@ -23,8 +24,6 @@ const CATEGORIES = [
   { id: "income", name: "Income", icon: "cash" },
   { id: "other", name: "Other", icon: "ellipsis-horizontal" },
 ];
-
-const API_URL = "http://localhost:3000/api";
 
 const CreateScreen = () => {
   const router = useRouter();
@@ -41,7 +40,7 @@ const CreateScreen = () => {
 
     if (!title.trim())
       return Alert.alert("Error,", "Please enter a transaction title");
-    if (!amount || isNan(parseFloat(amount)) || parseFloat(amount) <= 0) {
+    if (!amount || isNaN(parseFloat(amount)) || parseFloat(amount) <= 0) {
       Alert.alert("Error,", "Please enter a valid amount");
       return;
     }
@@ -54,11 +53,21 @@ const CreateScreen = () => {
         ? -Math.abs(parseFloat(amount))
         : +Math.abs(parseFloat(amount));
 
-      const response = await fetch(`${API_URL}/transactions`, {
+      // const response = await fetch(`${API_URL}/api/transactions/`, {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
+      //   body: JSON.stringify({
+      //     user_id: user.id,
+      //     title,
+      //     amount: formattedAmount,
+      //     category: selectedCategory,
+      //   }),
+      // });
+      const response = await fetch(`${API_URL}/api/transactions`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           user_id: user.id,
           title,
@@ -66,16 +75,36 @@ const CreateScreen = () => {
           category: selectedCategory,
         }),
       });
+
+      const data = await response.json();
+
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error, "Failed to create transaction");
+        throw new Error(
+          data.error || data.msg || "Failed to create transaction"
+        );
       }
-      Alert.alert("Success", "Transaction created successfully");
+
+      Alert.alert("Success", "Transaction created successfully", [
+        { text: "OK", onPress: () => router.back() },
+      ]);
+
+      
+      if (!response.ok) {
+        console.log("Backend error response:", data);
+        throw new Error(
+          data?.error ||
+            data?.msg ||
+            JSON.stringify(data) ||
+            "Failed to create transaction"
+        );
+      }
+
+      // Alert.alert("Success", "Transaction created successfully");
     } catch (error) {
-      Alert.alert("Error", error.message, "Failed to create Transaction");
+      Alert.alert("Error", error.message || "Failed to create transaction", [
+        { text: "OK" },
+      ]);
       console.error("Error creating transaction", error);
-    } finally {
-      setIsLoading(false);
     }
   };
 

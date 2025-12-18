@@ -132,6 +132,8 @@ export const styles = StyleSheet.create({
     marginBottom: 15,
   },
   transactionCard: {
+    marginRight: 12,
+    marginLeft: 12,
     backgroundColor: colors.card,
     borderRadius: 12,
     marginBottom: 10,
@@ -144,7 +146,7 @@ export const styles = StyleSheet.create({
     },
     shadowOpacity: 0.1,
     shadowRadius: 2,
-    elevation: 2,
+    elevation: 1,
   },
   transactionContent: {
     flex: 1,
